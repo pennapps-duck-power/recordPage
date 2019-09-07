@@ -152,12 +152,4 @@ document.querySelector('button#start').addEventListener('click', async () => {
   await init(constraints);
 });
 
-/******************* Upload *******************/
-const fs = require('fs');
-const AWS = require('aws-sdk');
-AWS.config.update({accessKeyId: "AKIATE4HMQCDVQ4KHGVL", 
-  secretAccessKey: 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 });
-const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-});
+
