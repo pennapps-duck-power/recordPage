@@ -21,21 +21,39 @@ let sourceBuffer;
 
 const errorMsgElement = document.querySelector('span#errorMsg');
 const recordedVideo = document.querySelector('video#recorded');
-
+const startButton = document.querySelector('button#start');
 const recordButton = document.querySelector('button#record');
+const playButton = document.querySelector('button#play');
+const uploadButton = document.querySelector('button#upload');
+const againButton = document.querySelector("button#again");
+
+var startElement = document.getElementById("start");
+var recordElement = document.getElementById("record");
+var recordedVideoElement = document.getElementById("recorded");
+var captureVideoElement = document.getElementById("gum");
+var playElement = document.getElementById("play");
+var uploadElement = document.getElementById("upload");
+var againElement = document.getElementById("again");
+    
+
 recordButton.addEventListener('click', () => {
   if (recordButton.textContent === 'Start Recording') {
     startRecording();
   } else {
     stopRecording();
+    recordElement.style.display = "none";
     recordButton.textContent = 'Start Recording';
-    playButton.disabled = false;
-    uploadButton.disabled = false;
+    playElement.style.display = "block";
+    uploadElement.style.display = "block";
+    recordedVideoElement.style.display = "block";
+    captureVideoElement.style.visibility = "hidden";
   }
 });
 
-const playButton = document.querySelector('button#play');
 playButton.addEventListener('click', () => {
+  if (recordedVideoElement.style.display != "block"){
+    recordedVideoElement.style.display = "block";
+  }
   const superBuffer = new Blob(recordedVideoBlobs, {type: 'video/mp4'});
   recordedVideo.src = null;
   recordedVideo.srcObject = null;
@@ -44,7 +62,6 @@ playButton.addEventListener('click', () => {
   recordedVideo.play();
 });
 
-const uploadButton = document.querySelector('button#upload');
 uploadButton.addEventListener('click', () => {
   const videoBlob = new Blob(recordedVideoBlobs, {type: 'video/mp4'});
   const audioBlob = new Blob(recordedVideoBlobs, {type: "audio/mp4"});
@@ -72,6 +89,10 @@ uploadButton.addEventListener('click', () => {
     document.body.removeChild(audioElement);
     window.URL.revokeObjectURL(audioUrl);
   }, 100);
+
+  againElement.style.display = "block";
+  playElement.style.display = "none";
+  uploadElement.style.display = "none";
 });
 
 function handleSourceOpen(event) {
@@ -103,8 +124,6 @@ function startRecording() {
   }
 
   recordButton.textContent = 'Stop Recording';
-  playButton.disabled = true;
-  uploadButton.disabled = true;
   mediaRecorder.onstop = (event) => {
     console.log('Recorder stopped: ', event);
   };
@@ -115,6 +134,7 @@ function startRecording() {
 
 function stopRecording() {
   mediaRecorder.stop();
+  stream.getVideoTracks()[0].stop();
   console.log('Recorded Blobs: ', recordedVideoBlobs);
 }
 
@@ -127,25 +147,44 @@ function handleSuccess(stream) {
   gumVideo.srcObject = stream;
 }
 
+againButton.addEventListener("click", async() =>{
+  const constraints = {
+    audio: {
+      echoCancellation: true
+    },
+    video: {
+      width: 1280, height: 900
+    }
+  };
+  console.log('Using media constraints:', constraints);
+  await init(constraints);
+});
+
 async function init(constraints) {
   try {
+    if (captureVideoElement.style.visibility != "visible"){
+      captureVideoElement.style.visibility = "visible";
+    }
+    recordedVideoElement.style.display = "none";
+    againElement.style.display = "none";
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
     handleSuccess(stream);
+    startElement.style.display = "none";
+    recordElement.style.display = "block";
   } catch (e) {
     console.error('navigator.getUserMedia error:', e);
     errorMsgElement.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
   }
 }
 
-document.querySelector('button#start').addEventListener('click', async () => {
+startButton.addEventListener('click', async () => {
   // const hasEchoCancellation = document.querySelector('#echoCancellation').checked;
   const constraints = {
     audio: {
       echoCancellation: true
-      // {exact: hasEchoCancellation}
     },
     video: {
-      width: 1280, height: 720
+      width: 1280, height: 900
     }
   };
   console.log('Using media constraints:', constraints);

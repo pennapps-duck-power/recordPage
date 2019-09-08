@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!--
+ *  Copyright (c) 2015 The WebRTC project authors. All Rights Reserved.
+ *
+ *  Use of this source code is governed by a BSD-style license
+ *  that can be found in the LICENSE file in the root of the source
+ *  tree.
+-->
+<html>
+    <head>
+        <meta charset="UTF-8" />
+
+        <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1">
+        <meta itemprop="name" content="WebRTC code samples">
+
+        <base target="_blank">
+
+        <title>Duck Power - Capture Page</title>
+        <link rel="stylesheet" 
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+            crossorigin="anonymous">
+        <link href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="css/capturepage.css">
+        <style>
+            body{
+                background-color: #FFEC9E;
+            }
+            video{
+                border-radius: 25px;
+                background-color: white;
+            }
+            #gum{
+                margin-top: 160px;
+                margin-left: 100px;
+            }
+            #recorded{
+                float: right;
+                margin-top: 160px;
+                margin-right: 100px;
+            }
+            #leftButtons{
+                margin-top: 20px;
+                margin-left: 250px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="container">
+            <div style="width: 100%">
+                <video id="gum" playsinline autoplay muted></video>
+                <video id="recorded" playsinline style="display: none"></video>
+            </div>
+        </div>
+
+        <div id = "leftButtons">
+            <button id="start" class="btn btn-warning">Start Camera</button>
+            <button id="record" class="btn btn-warning" style="display: none">Start Recording</button>
+        </div>
+
+        <div id = "rightButtons">
+            <button id="upload" class="btn btn-warning" style="float: right; display: none; margin-right: 240px;">Analyze</button>
+            <button id="play" class="btn btn-warning" style="float: right; display: none; margin-right: 30px;" >Play</button>
+            <button id="again" class="btn btn-warning" style="float: right; display: none; margin-right: 280px;">Try Again</button>
+        </div>
+        <!-- include adapter for srcObject shim -->
+        <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+        <script src="js/main.js" async></script>
+        <script src="../../../js/lib/ga.js"></script>
+
+    </body>
+</html>
